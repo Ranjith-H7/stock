@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WealthTrack - Investment Platform</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #00e676;
+      --primary-dark: #00c853;
+      --secondary: #2979ff;
+      --dark: #121212;
+      --darker: #0a0a0a;
+      --light: #f5f5f5;
+      --gray: #424242;
+      --light-gray: #bdbdbd;
+      --success: #4caf50;
+      --warning: #ff9800;
+      --danger: #f44336;
+      --card-bg: #1e1e1e;
+      --card-border: #333;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--dark);
+      color: var(--light);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Auth Pages */
+    .auth-container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .auth-left {
+      flex: 1;
+      background: linear-gradient(135deg, var(--darker), var(--dark));
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+
+    .auth-right {
+      flex: 1;
+      background: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80') no-repeat center center;
+      background-size: cover;
+      position: relative;
+    }
+
+    .auth-right::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .auth-form {
+      width: 100%;
+      max-width: 400px;
+      background-color: var(--card-bg);
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .auth-form h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      background-color: var(--dark);
+      border: 1px solid var(--gray);
+      border-radius: 5px;
+      color: var(--light);
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(0, 230, 118, 0.2);
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: var(--primary);
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+      width: 100%;
+    }
+
+    .btn:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background-color: rgba(0, 230, 118, 0.1);
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .auth-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .auth-link:hover {
+      text-decoration: underline;
+    }
+
+    .error-message {
+      color: var(--danger);
+      font-size: 14px;
+      margin-top: 5px;
+      display: none;
+    }
+
+    /* Dashboard */
+    .dashboard {
+      display: none;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--gray);
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+    }
+
+    .logo i {
+      margin-right: 10px;
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+    }
+
+    .user-info {
+      margin-right: 20px;
+      text-align: right;
+    }
+
+    .user-name {
+      font-weight: 500;
+    }
+
+    .user-email {
+      font-size: 14px;
+      color: var(--light-gray);
+    }
+
+    .logout-btn {
+      background-color: transparent;
+      color: var(--light);
+      border: 1px solid var(--gray);
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .logout-btn:hover {
+      background-color: rgba(244, 67, 54, 0.1);
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    /* Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--card-border);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--gray);
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .card-actions button {
+      background-color: transparent;
+      color: var(--light-gray);
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+
+    .card-actions button:hover {
+      color: var(--primary);
+    }
+
+    /* Portfolio Summary */
+    .portfolio-summary {
+      grid-column: span 4;
+    }
+
+    .portfolio-value {
+      font-size: 32px;
+      font-weight: 700;
+      margin: 10px 0;
+    }
+
+    .portfolio-change {
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    .change-positive {
+      color: var(--success);
+    }
+
+    .change-negative {
+      color: var(--danger);
+    }
+
+    .portfolio-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--light-gray);
+      margin-bottom: 5px;
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    /* Market Overview */
+    .market-overview {
+      grid-column: span 8;
+    }
+
+    .market-indices {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .index-card {
+      background-color: var(--dark);
+      border-radius: 8px;
+      padding: 15px;
+      border: 1px solid var(--gray);
+    }
+
+    .index-name {
+      font-size: 14px;
+      color: var(--light-gray);
+      margin-bottom: 5px;
+    }
+
+    .index-value {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .index-change {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    /* Investment Chart */
+    .investment-chart {
+      grid-column: span 8;
+      height: 400px;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 100%;
+      width: 100%;
+    }
+
+    /* Investment Form */
+    .investment-form {
+      grid-column: span 4;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .form-col {
+      flex: 1;
+    }
+
+    /* Investments Table */
+    .investments-table {
+      grid-column: span 12;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--gray);
+    }
+
+    th {
+      font-weight: 600;
+      color: var(--light-gray);
+      background-color: var(--darker);
+    }
+
+    tr:hover {
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+
+    .positive {
+      color: var(--success);
+    }
+
+    .negative {
+      color: var(--danger);
+    }
+
+    .action-btn {
+      background-color: transparent;
+      color: var(--light-gray);
+      border: none;
+      cursor: pointer;
+      margin: 0 5px;
+      transition: all 0.3s;
+    }
+
+    .action-btn:hover {
+      color: var(--primary);
+    }
+
+    /* Timer */
+    .timer {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: var(--card-bg);
+      border: 1px solid var(--gray);
+      border-radius: 5px;
+      padding: 10px 15px;
+      font-size: 14px;
+      font-weight: 500;
+      display: none;
+      z-index: 1000;
+    }
+
+    .timer-warning {
+      color: var(--warning);
+    }
+
+    .timer-danger {
+      color: var(--danger);
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .dashboard-grid {
+        grid-template-columns: repeat(6, 1fr);
+      }
+      
+      .portfolio-summary,
+      .investment-form {
+        grid-column: span 3;
+      }
+      
+      .market-overview,
+      .investment-chart {
+        grid-column: span 6;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .auth-container {
+        flex-direction: column;
+      }
+      
+      .auth-right {
+        display: none;
+      }
+      
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .portfolio-summary,
+      .market-overview,
+      .investment-chart,
+      .investment-form {
+        grid-column: span 1;
+      }
+      
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+      
+      .market-indices {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* Toast Notifications */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1100;
+    }
+
+    .toast {
+      padding: 15px 20px;
+      background-color: var(--card-bg);
+      border-left: 4px solid var(--primary);
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      transform: translateX(120%);
+      transition: transform 0.3s ease;
+    }
+
+    .toast.show {
+      transform: translateX(0);
+    }
+
+    .toast-success {
+      border-left-color: var(--success);
+    }
+
+    .toast-error {
+      border-left-color: var(--danger);
+    }
+
+    .toast-warning {
+      border-left-color: var(--warning);
+    }
+
+    .toast-icon {
+      margin-right: 10px;
+      font-size: 20px;
+    }
+
+    .toast-message {
+      flex: 1;
+    }
+
+    .toast-close {
+      background: none;
+      border: none;
+      color: var(--light-gray);
+      cursor: pointer;
+      font-size: 16px;
+      margin-left: 10px;
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Toast Notifications -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Timer -->
+  <div class="timer" id="timer">
+    <i class="fas fa-clock"></i> Market updates in: <span id="timerValue">10:00</span>
+  </div>
+
+  <!-- Auth Pages -->
+  <div class="auth-container" id="authContainer">
+    <div class="auth-left">
+      <div class="auth-form" id="loginForm">
+        <h2>Welcome to WealthTrack</h2>
+        <div class="form-group">
+          <label for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" class="form-control" placeholder="Enter your email">
+          <div class="error-message" id="loginEmailError"></div>
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password">
+          <div class="error-message" id="loginPasswordError"></div>
+        </div>
+        <button type="button" class="btn" id="loginBtn" onclick="login()">
+          <span id="loginBtnText">Login</span>
+          <span class="spinner" id="loginSpinner" style="display: none;"></span>
+        </button>
+        <div class="auth-footer">
+          <p>Don't have an account? <a class="auth-link" onclick="showCreateAccount()">Sign up</a></p>
+        </div>
+      </div>
+
+      <div class="auth-form" id="createAccountForm" style="display: none;">
+        <h2>Create Account</h2>
+        <div class="form-group">
+          <label for="createName">Full Name</label>
+          <input type="text" id="createName" class="form-control" placeholder="Enter your full name">
+          <div class="error-message" id="createNameError"></div>
+        </div>
+        <div class="form-group">
+          <label for="createEmail">Email</label>
+          <input type="email" id="createEmail" class="form-control" placeholder="Enter your email">
+          <div class="error-message" id="createEmailError"></div>
+        </div>
+        <div class="form-group">
+          <label for="createPassword">Password</label>
+          <input type="password" id="createPassword" class="form-control" placeholder="Create a password">
+          <div class="error-message" id="createPasswordError"></div>
+        </div>
+        <div class="form-group">
+          <label for="createConfirmPassword">Confirm Password</label>
+          <input type="password" id="createConfirmPassword" class="form-control" placeholder="Confirm your password">
+          <div class="error-message" id="createConfirmPasswordError"></div>
+        </div>
+        <button type="button" class="btn" id="createAccountBtn" onclick="createAccount()">
+          <span id="createAccountBtnText">Create Account</span>
+          <span class="spinner" id="createAccountSpinner" style="display: none;"></span>
+        </button>
+        <div class="auth-footer">
+          <p>Already have an account? <a class="auth-link" onclick="showLogin()">Login</a></p>
+        </div>
+      </div>
+    </div>
+    <div class="auth-right">
+      <div style="position: relative; z-index: 1; padding: 40px; height: 100%; display: flex; flex-direction: column; justify-content: center;">
+        <h1 style="font-size: 36px; margin-bottom: 20px; color: var(--primary);">Track. Invest. Grow.</h1>
+        <p style="font-size: 18px; margin-bottom: 30px;">Your comprehensive platform for stock and mutual fund investments with real-time data and analytics.</p>
+        <div style="display: flex; gap: 15px; margin-top: 20px;">
+          <div style="flex: 1; background-color: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 8px;">
+            <i class="fas fa-chart-line" style="font-size: 24px; color: var(--primary); margin-bottom: 10px;"></i>
+            <h3 style="font-size: 18px; margin-bottom: 10px;">Real-time Data</h3>
+            <p style="font-size: 14px; color: var(--light-gray);">Live market data and interactive charts</p>
+          </div>
+          <div style="flex: 1; background-color: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 8px;">
+            <i class="fas fa-wallet" style="font-size: 24px; color: var(--primary); margin-bottom: 10px;"></i>
+            <h3 style="font-size: 18px; margin-bottom: 10px;">Portfolio Tracking</h3>
+            <p style="font-size: 14px; color: var(--light-gray);">Monitor all your investments in one place</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="dashboard container" id="dashboard">
+    <div class="header">
+      <div class="logo">
+        <i class="fas fa-chart-line"></i> WealthTrack
+      </div>
+      <div class="user-menu">
+        <div class="user-info">
+          <div class="user-name" id="userName">John Doe</div>
+          <div class="user-email" id="userEmail">john@example.com</div>
+        </div>
+        <button class="logout-btn" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+      <!-- Portfolio Summary -->
+      <div class="card portfolio-summary">
+        <div class="card-header">
+          <div class="card-title">
+            <i class="fas fa-wallet"></i> Portfolio Summary
+          </div>
+          <div class="card-actions">
+            <button title="Refresh" onclick="refreshPortfolio()">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+          </div>
+        </div>
+        <div class="portfolio-value" id="portfolioValue">₹0.00</div>
+        <div class="portfolio-change">
+          <span id="portfolioChange">+0.00%</span>
+          <span id="portfolioChangeAmount">(₹0.00)</span>
+        </div>
+        <div class="portfolio-stats">
+          <div class="stat-item">
+            <span class="stat-label">Total Investments</span>
+            <span class="stat-value" id="totalInvestments">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Today's Gain</span>
+            <span class="stat-value" id="todaysGain">₹0.00</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Stocks</span>
+            <span class="stat-value" id="stocksCount">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Mutual Funds</span>
+            <span class="stat-value" id="mutualFundsCount">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Market Overview -->
+      <div class="card market-overview">
+        <div class="card-header">
+          <div class="card-title">
+            <i class="fas fa-globe"></i> Market Overview
+          </div>
+          <div class="card-actions">
+            <button title="Refresh" onclick="refreshMarketData()">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+          </div>
+        </div>
+        <div class="market-indices">
+          <div class="index-card">
+            <div class="index-name">NIFTY 50</div>
+            <div class="index-value" id="niftyValue">19,425.35</div>
+            <div class="index-change positive">
+              <i class="fas fa-caret-up"></i> +0.45% (87.20)
+            </div>
+          </div>
+          <div class="index-card">
+            <div class="index-name">SENSEX</div>
+            <div class="index-value" id="sensexValue">64,718.56</div>
+            <div class="index-change positive">
+              <i class="fas fa-caret-up"></i> +0.38% (245.70)
+            </div>
+          </div>
+          <div class="index-card">
+            <div class="index-name">NIFTY BANK</div>
+            <div class="index-value" id="bankNiftyValue">43,567.80</div>
+            <div class="index-change negative">
+              <i class="fas fa-caret-down"></i> -0.12% (52.40)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Investment Chart -->
+      <div class="card investment-chart">
+        <div class="card-header">
+          <div class="card-title" id="chartTitle">
+            <i class="fas fa-chart-line"></i> Stock Chart
+          </div>
+          <div class="card-actions">
+            <select id="timeframeSelect" onchange="updateChartTimeframe()" style="background: var(--dark); color: var(--light); border: 1px solid var(--gray); padding: 5px; border-radius: 4px;">
+              <option value="1d">1 Day</option>
+              <option value="1w">1 Week</option>
+              <option value="1m">1 Month</option>
+              <option value="3m">3 Months</option>
+              <option value="1y">1 Year</option>
+            </select>
+            <button title="Fullscreen" onclick="toggleFullscreenChart()">
+              <i class="fas fa-expand"></i>
+            </button>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="chartCanvas"></canvas>
+        </div>
+      </div>
+
+      <!-- Investment Form -->
+      <div class="card investment-form">
+        <div class="card-header">
+          <div class="card-title">
+            <i class="fas fa-shopping-cart"></i> New Investment
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="investmentType">Investment Type</label>
+          <select id="investmentType" class="form-control" onchange="updateInvestmentOptions()">
+            <option value="stock">Stock</option>
+            <option value="mutual-fund">Mutual Fund</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="investmentName">Investment</label>
+          <select id="investmentName" class="form-control" onchange="updateSelectedInvestment()">
+            <option value="">Select Investment</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-col">
+            <label for="currentPrice">Current Price</label>
+            <input type="text" id="currentPrice" class="form-control" readonly>
+          </div>
+          <div class="form-col">
+            <label for="investmentQuantity">Quantity</label>
+            <input type="number" id="investmentQuantity" class="form-control" placeholder="0" min="1">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="investmentAmount">Amount</label>
+          <input type="text" id="investmentAmount" class="form-control" readonly>
+        </div>
+        <button type="button" class="btn" onclick="placeInvestmentOrder()">
+          <i class="fas fa-check"></i> Place Order
+        </button>
+      </div>
+
+      <!-- Investments Table -->
+      <div class="card investments-table">
+        <div class="card-header">
+          <div class="card-title">
+            <i class="fas fa-list"></i> Your Investments
+          </div>
+          <div class="card-actions">
+            <button title="Refresh" onclick="refreshInvestments()">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+          </div>
+        </div>
+        <div style="overflow-x: auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Avg. Price</th>
+                <th>Current Price</th>
+                <th>Invested</th>
+                <th>Current Value</th>
+                <th>P&L</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="investmentsTableBody">
+              <!-- Filled by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Global variables
+    let currentUser = null;
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    let investments = JSON.parse(localStorage.getItem("investments")) || [];
+    let chart = null;
+    let timerInterval = null;
+    let marketDataInterval = null;
+    let chartDataInterval = null;
+
+    // Stock and mutual fund data
+    const stocks = [
+      { id: "RELIANCE", name: "Reliance Industries", price: 2900, basePrice: 2900, historicalData: {} },
+      { id: "TCS", name: "TCS", price: 4100, basePrice: 4100, historicalData: {} },
+      { id: "HDFCBANK", name: "HDFC Bank", price: 1600, basePrice: 1600, historicalData: {} },
+      { id: "INFY", name: "Infosys", price: 1800, basePrice: 1800, historicalData: {} },
+      { id: "ICICIBANK", name: "ICICI Bank", price: 1100, basePrice: 1100, historicalData: {} },
+      { id: "AXISBANK", name: "Axis Bank", price: 1200, basePrice: 1200, historicalData: {} },
+      { id: "TATASTEEL", name: "Tata Steel", price: 175, basePrice: 175, historicalData: {} },
+      { id: "BHARTIARTL", name: "Bharti Airtel", price: 1400, basePrice: 1400, historicalData: {} },
+      { id: "MARUTI", name: "Maruti Suzuki", price: 12500, basePrice: 12500, historicalData: {} },
+      { id: "LT", name: "L&T", price: 3600, basePrice: 3600, historicalData: {} },
+    ];
+
+    const mutualFunds = [
+      { id: "SBIBLUE", name: "SBI Bluechip Fund", price: 750, basePrice: 750, historicalData: {} },
+      { id: "HDFCMID", name: "HDFC Mid-Cap Fund", price: 1200, basePrice: 1200, historicalData: {} },
+      { id: "ICICIPRU", name: "ICICI Prudential Fund", price: 650, basePrice: 650, historicalData: {} },
+      { id: "AXISLTE", name: "Axis Long Term Equity", price: 900, basePrice: 900, historicalData: {} },
+      { id: "MIRAE", name: "Mirae Asset Large Cap", price: 850, basePrice: 850, historicalData: {} },
+      { id: "KOTAKFLEXI", name: "Kotak Flexicap Fund", price: 1100, basePrice: 1100, historicalData: {} },
+      { id: "NIPPON", name: "Nippon India Growth", price: 1300, basePrice: 1300, historicalData: {} },
+      { id: "ADITYABSL", name: "Aditya Birla SL Fund", price: 950, basePrice: 950, historicalData: {} },
+      { id: "PARAGPARIKH", name: "Parag Parikh Flexi Cap", price: 700, basePrice: 700, historicalData: {} },
+      { id: "UTIEQUITY", name: "UTI Equity Fund", price: 800, basePrice: 800, historicalData: {} },
+    ];
+
+    // Market indices data
+    const marketIndices = [
+      { id: "NIFTY50", name: "NIFTY 50", value: 19425.35, change: 0.45, changeAmount: 87.20 },
+      { id: "SENSEX", name: "SENSEX", value: 64718.56, change: 0.38, changeAmount: 245.70 },
+      { id: "NIFTYBANK", name: "NIFTY BANK", value: 43567.80, change: -0.12, changeAmount: -52.40 },
+    ];
+
+    // Initialize the application
+    function init() {
+      // Generate historical data for all investments
+      generateHistoricalData();
+      
+      // Check if user is logged in
+      currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      if (currentUser) {
+        showDashboard();
+        initializeDashboard();
+      } else {
+        showLogin();
+      }
+      
+      // Initialize event listeners
+      document.getElementById('investmentQuantity').addEventListener('input', calculateInvestmentAmount);
+    }
+
+    // Generate random historical data for all investments
+    function generateHistoricalData() {
+      const timeframes = ['1d', '1w', '1m', '3m', '1y'];
+      const now = new Date();
+      
+      // Generate for stocks
+      stocks.forEach(stock => {
+        stock.historicalData = {};
+        timeframes.forEach(timeframe => {
+          stock.historicalData[timeframe] = generateTimeSeriesData(stock.basePrice, timeframe);
+        });
+      });
+      
+      // Generate for mutual funds
+      mutualFunds.forEach(mf => {
+        mf.historicalData = {};
+        timeframes.forEach(timeframe => {
+          mf.historicalData[timeframe] = generateTimeSeriesData(mf.basePrice, timeframe);
+        });
+      });
+    }
+
+    // Generate time series data for a given timeframe
+    function generateTimeSeriesData(basePrice, timeframe) {
+      const data = [];
+      let pointCount = 100;
+      let volatility = 0.02;
+      
+      switch(timeframe) {
+        case '1d': pointCount = 24 * 6; break; // 10-minute intervals for 24 hours
+        case '1w': pointCount = 7; break; // Daily for 1 week
+        case '1m': pointCount = 30; break; // Daily for 1 month
+        case '3m': pointCount = 13; break; // Weekly for 3 months
+        case '1y': pointCount = 12; break; // Monthly for 1 year
+      }
+      
+      // Generate random walk data
+      let currentValue = basePrice;
+      for (let i = 0; i < pointCount; i++) {
+        // Random walk with some drift
+        currentValue = currentValue * (1 + (Math.random() - 0.5) * volatility);
+        data.push({
+          time: i,
+          value: currentValue
+        });
+      }
+      
+      return data;
+    }
+
+    // Auth functions
+    function showLogin() {
+      document.getElementById('loginForm').style.display = 'block';
+      document.getElementById('createAccountForm').style.display = 'none';
+      document.getElementById('authContainer').style.display = 'flex';
+      document.getElementById('dashboard').style.display = 'none';
+    }
+
+    function showCreateAccount() {
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('createAccountForm').style.display = 'block';
+      document.getElementById('authContainer').style.display = 'flex';
+      document.getElementById('dashboard').style.display = 'none';
+    }
+
+    function showDashboard() {
+      document.getElementById('authContainer').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+    }
+
+    function login() {
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      
+      // Validate inputs
+      let isValid = true;
+      
+      if (!email) {
+        document.getElementById('loginEmailError').textContent = 'Email is required';
+        document.getElementById('loginEmailError').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('loginEmailError').style.display = 'none';
+      }
+      
+      if (!password) {
+        document.getElementById('loginPasswordError').textContent = 'Password is required';
+        document.getElementById('loginPasswordError').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('loginPasswordError').style.display = 'none';
+      }
+      
+      if (!isValid) return;
+      
+      // Show loading state
+      document.getElementById('loginBtnText').style.display = 'none';
+      document.getElementById('loginSpinner').style.display = 'inline-block';
+      
+      // Simulate API call
+      setTimeout(() => {
+        const user = users.find(u => u.email === email && u.password === password);
+        
+        if (user) {
+          currentUser = user;
+          localStorage.setItem('currentUser', JSON.stringify(user));
+          showDashboard();
+          initializeDashboard();
+          showToast('Login successful!', 'success');
+        } else {
+          document.getElementById('loginPasswordError').textContent = 'Invalid email or password';
+          document.getElementById('loginPasswordError').style.display = 'block';
+          showToast('Invalid email or password', 'error');
+        }
+        
+        // Hide loading state
+        document.getElementById('loginBtnText').style.display = 'inline';
+        document.getElementById('loginSpinner').style.display = 'none';
+      }, 1000);
+    }
+
+    function createAccount() {
+      const name = document.getElementById('createName').value;
+      const email = document.getElementById('createEmail').value;
+      const password = document.getElementById('createPassword').value;
+      const confirmPassword = document.getElementById('createConfirmPassword').value;
+      
+      // Validate inputs
+      let isValid = true;
+      
+      if (!name) {
+        document.getElementById('createNameError').textContent = 'Name is required';
+        document.getElementById('createNameError').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('createNameError').style.display = 'none';
+      }
+      
+      if (!email) {
+        document.getElementById('createEmailError').textContent = 'Email is required';
+        document.getElementById('createEmailError').style.display = 'block';
+        isValid = false;
+      } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+        document.getElementById('createEmailError').textContent = 'Invalid email format';
+        document.getElementById('createEmailError').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('createEmailError').style.display = 'none';
+      }
+      
+      if (!password) {
+        document.getElementById('createPasswordError').textContent = 'Password is required';
+        document.getElementById('createPasswordError').style.display = 'block';
+        isValid = false;
+      } else if (password.length < 6) {
+        document.getElementById('createPasswordError').textContent = 'Password must be at least 6 characters';
+        document.getElementById('createPasswordError').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('createPasswordError').style.display = 'none';
+      }
+      
+      if (password !== confirmPassword) {
+        document.getElementById('createConfirmPasswordError').textContent = 'Passwords do not match';
+        document.getElementById('createConfirmPasswordError').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('createConfirmPasswordError').style.display = 'none';
+      }
+      
+      if (!isValid) return;
+      
+      // Check if email already exists
+      if (users.find(u => u.email === email)) {
+        document.getElementById('createEmailError').textContent = 'Email already exists';
+        document.getElementById('createEmailError').style.display = 'block';
+        showToast('Email already exists', 'error');
+        return;
+      }
+      
+      // Show loading state
+      document.getElementById('createAccountBtnText').style.display = 'none';
+      document.getElementById('createAccountSpinner').style.display = 'inline-block';
+      
+      // Simulate API call
+      setTimeout(() => {
+        const newUser = {
+          id: generateId(),
+          name,
+          email,
+          password,
+          createdAt: new Date().toISOString()
+        };
+        
+        users.push(newUser);
+        localStorage.setItem('users', JSON.stringify(users));
+        
+        currentUser = newUser;
+        localStorage.setItem('currentUser', JSON.stringify(newUser));
+        
+        showDashboard();
+        initializeDashboard();
+        showToast('Account created successfully!', 'success');
+        
+        // Hide loading state
+        document.getElementById('createAccountBtnText').style.display = 'inline';
+        document.getElementById('createAccountSpinner').style.display = 'none';
+      }, 1500);
+    }
+
+    function logout() {
+      currentUser = null;
+      localStorage.removeItem('currentUser');
+      
+      // Clear intervals
+      if (timerInterval) clearInterval(timerInterval);
+      if (marketDataInterval) clearInterval(marketDataInterval);
+      if (chartDataInterval) clearInterval(chartDataInterval);
+      
+      showLogin();
+      showToast('Logged out successfully', 'success');
+    }
+
+    // Dashboard functions
+    function initializeDashboard() {
+      if (!currentUser) return;
+      
+      // Set user info
+      document.getElementById('userName').textContent = currentUser.name || currentUser.email.split('@')[0];
+      document.getElementById('userEmail').textContent = currentUser.email;
+      
+      // Initialize investment options
+      updateInvestmentOptions();
+      
+      // Initialize portfolio summary
+      updatePortfolioSummary();
+      
+      // Initialize market data
+      updateMarketData();
+      
+      // Initialize investments table
+      updateInvestmentsTable();
+      
+      // Start market data updates
+      marketDataInterval = setInterval(updateMarketData, 5000);
+      
+      // Start timer if not already running
+      if (!localStorage.getItem('marketTimerStart')) {
+        startMarketTimer();
+      } else {
+        updateMarketTimer();
+        timerInterval = setInterval(updateMarketTimer, 1000);
+        document.getElementById('timer').style.display = 'block';
+      }
+    }
+
+    function updateInvestmentOptions() {
+      const type = document.getElementById('investmentType').value;
+      const select = document.getElementById('investmentName');
+      
+      select.innerHTML = '<option value="">Select Investment</option>';
+      
+      const items = type === 'stock' ? stocks : mutualFunds;
+      
+      items.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = `${item.name} (₹${item.price.toFixed(2)})`;
+        select.appendChild(option);
+      });
+    }
+
+    function updateSelectedInvestment() {
+      const type = document.getElementById('investmentType').value;
+      const id = document.getElementById('investmentName').value;
+      
+      if (!id) {
+        document.getElementById('currentPrice').value = '';
+        document.getElementById('investmentAmount').value = '';
+        return;
+      }
+      
+      const items = type === 'stock' ? stocks : mutualFunds;
+      const investment = items.find(item => item.id === id);
+      
+      if (investment) {
+        document.getElementById('currentPrice').value = `₹${investment.price.toFixed(2)}`;
+        calculateInvestmentAmount();
+        updateChartData(investment);
+      }
+    }
+
+    function calculateInvestmentAmount() {
+      const quantity = parseInt(document.getElementById('investmentQuantity').value) || 0;
+      const currentPrice = parseFloat(document.getElementById('currentPrice').value.replace('₹', '')) || 0;
+      const amount = quantity * currentPrice;
+      
+      document.getElementById('investmentAmount').value = amount ? `₹${amount.toFixed(2)}` : '';
+    }
+
+    function placeInvestmentOrder() {
+      const type = document.getElementById('investmentType').value;
+      const id = document.getElementById('investmentName').value;
+      const quantity = parseInt(document.getElementById('investmentQuantity').value);
+      
+      if (!id) {
+        showToast('Please select an investment', 'error');
+        return;
+      }
+      
+      if (!quantity || quantity < 1) {
+        showToast('Please enter a valid quantity', 'error');
+        return;
+      }
+      
+      const items = type === 'stock' ? stocks : mutualFunds;
+      const investment = items.find(item => item.id === id);
+      
+      if (investment) {
+        const newInvestment = {
+          id: generateId(),
+          type,
+          investmentId: investment.id,
+          name: investment.name,
+          quantity,
+          avgPrice: investment.price,
+          currentPrice: investment.price,
+          date: new Date().toISOString()
+        };
+        
+        investments.push(newInvestment);
+        localStorage.setItem('investments', JSON.stringify(investments));
+        
+        // Update UI
+        updatePortfolioSummary();
+        updateInvestmentsTable();
+        
+        // Reset form
+        document.getElementById('investmentQuantity').value = '';
+        document.getElementById('investmentAmount').value = '';
+        
+        showToast(`Successfully purchased ${quantity} units of ${investment.name}`, 'success');
+        
+        // Start timer if not already running
+        if (!localStorage.getItem('marketTimerStart')) {
+          startMarketTimer();
+        }
+      }
+    }
+
+    function updatePortfolioSummary() {
+      if (!currentUser) return;
+      
+      let totalValue = 0;
+      let investedValue = 0;
+      let stocksCount = 0;
+      let mutualFundsCount = 0;
+      let todaysGain = 0;
+      
+      investments.forEach(investment => {
+        const currentItem = investment.type === 'stock' 
+          ? stocks.find(s => s.id === investment.investmentId)
+          : mutualFunds.find(mf => mf.id === investment.investmentId);
+          
+        if (currentItem) {
+          const currentValue = investment.quantity * currentItem.price;
+          const invested = investment.quantity * investment.avgPrice;
+          
+          totalValue += currentValue;
+          investedValue += invested;
+          todaysGain += (currentItem.price - currentItem.basePrice) * investment.quantity;
+          
+          if (investment.type === 'stock') stocksCount++;
+          else mutualFundsCount++;
+        }
+      });
+      
+      const change = totalValue - investedValue;
+      const changePercent = investedValue > 0 ? (change / investedValue) * 100 : 0;
+      
+      document.getElementById('portfolioValue').textContent = `₹${totalValue.toFixed(2)}`;
+      document.getElementById('totalInvestments').textContent = investments.length;
+      document.getElementById('stocksCount').textContent = stocksCount;
+      document.getElementById('mutualFundsCount').textContent = mutualFundsCount;
+      document.getElementById('todaysGain').textContent = `₹${todaysGain.toFixed(2)}`;
+      
+      const portfolioChange = document.getElementById('portfolioChange');
+      const portfolioChangeAmount = document.getElementById('portfolioChangeAmount');
+      
+      if (change >= 0) {
+        portfolioChange.textContent = `+${changePercent.toFixed(2)}%`;
+        portfolioChangeAmount.textContent = `(+₹${change.toFixed(2)})`;
+        portfolioChange.className = 'portfolio-change positive';
+        portfolioChangeAmount.className = 'positive';
+      } else {
+        portfolioChange.textContent = `${changePercent.toFixed(2)}%`;
+        portfolioChangeAmount.textContent = `(-₹${Math.abs(change).toFixed(2)})`;
+        portfolioChange.className = 'portfolio-change negative';
+        portfolioChangeAmount.className = 'negative';
+      }
+    }
+
+    function updateMarketData() {
+      // Update market indices with random changes
+      marketIndices.forEach(index => {
+        // Small random change
+        const change = (Math.random() - 0.5) * 0.3;
+        const changeAmount = index.value * change / 100;
+        
+        index.value += changeAmount;
+        index.change = change;
+        index.changeAmount = changeAmount;
+        
+        // Update DOM
+        const element = document.getElementById(`${index.id.toLowerCase()}Value`);
+        if (element) element.textContent = index.value.toFixed(2);
+      });
+      
+      // Update stock prices
+      stocks.forEach(stock => {
+        const change = (Math.random() - 0.5) * 0.5;
+        stock.price = Math.max(1, stock.price * (1 + change / 100));
+      });
+      
+      // Update mutual fund prices (less volatile)
+      mutualFunds.forEach(mf => {
+        const change = (Math.random() - 0.5) * 0.2;
+        mf.price = Math.max(1, mf.price * (1 + change / 100));
+      });
+      
+      // Update investments table with new prices
+      updateInvestmentsTable();
+      updatePortfolioSummary();
+      
+      // Update investment options dropdown prices
+      updateInvestmentOptions();
+      
+      // Update current price if an investment is selected
+      const selectedId = document.getElementById('investmentName').value;
+      if (selectedId) {
+        const type = document.getElementById('investmentType').value;
+        const items = type === 'stock' ? stocks : mutualFunds;
+        const investment = items.find(item => item.id === selectedId);
+        if (investment) {
+          document.getElementById('currentPrice').value = `₹${investment.price.toFixed(2)}`;
+          calculateInvestmentAmount();
+        }
+      }
+    }
+
+    function updateInvestmentsTable() {
+      const tbody = document.getElementById('investmentsTableBody');
+      tbody.innerHTML = '';
+      
+      if (investments.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="9" style="text-align: center; padding: 20px;">No investments yet. Start by adding some above.</td>`;
+        tbody.appendChild(row);
+        return;
+      }
+      
+      investments.forEach(investment => {
+        const currentItem = investment.type === 'stock' 
+          ? stocks.find(s => s.id === investment.investmentId)
+          : mutualFunds.find(mf => mf.id === investment.investmentId);
+          
+        if (currentItem) {
+          const currentValue = investment.quantity * currentItem.price;
+          const investedValue = investment.quantity * investment.avgPrice;
+          const pnl = currentValue - investedValue;
+          const pnlPercent = (pnl / investedValue) * 100;
+          
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${investment.type === 'stock' ? 'Stock' : 'Mutual Fund'}</td>
+            <td>${investment.name}</td>
+            <td>${investment.quantity}</td>
+            <td>₹${investment.avgPrice.toFixed(2)}</td>
+            <td>₹${currentItem.price.toFixed(2)}</td>
+            <td>₹${investedValue.toFixed(2)}</td>
+            <td>₹${currentValue.toFixed(2)}</td>
+            <td class="${pnl >= 0 ? 'positive' : 'negative'}">
+              ${pnl >= 0 ? '+' : ''}${pnl.toFixed(2)} (${pnlPercent >= 0 ? '+' : ''}${pnlPercent.toFixed(2)}%)
+            </td>
+            <td>
+              <button class="action-btn" title="Sell" onclick="sellInvestment('${investment.id}')">
+                <i class="fas fa-dollar-sign"></i>
+              </button>
+              <button class="action-btn" title="View Details" onclick="viewInvestmentDetails('${investment.id}')">
+                <i class="fas fa-info-circle"></i>
+              </button>
+            </td>
+          `;
+          tbody.appendChild(row);
+        }
+      });
+    }
+
+    function sellInvestment(investmentId) {
+      const investmentIndex = investments.findIndex(i => i.id === investmentId);
+      
+      if (investmentIndex !== -1) {
+        const investment = investments[investmentIndex];
+        const currentItem = investment.type === 'stock' 
+          ? stocks.find(s => s.id === investment.investmentId)
+          : mutualFunds.find(mf => mf.id === investment.investmentId);
+          
+        if (confirm(`Are you sure you want to sell all ${investment.quantity} units of ${investment.name} at current price of ₹${currentItem.price.toFixed(2)}?`)) {
+          investments.splice(investmentIndex, 1);
+          localStorage.setItem('investments', JSON.stringify(investments));
+          
+          updatePortfolioSummary();
+          updateInvestmentsTable();
+          
+          showToast(`Successfully sold ${investment.quantity} units of ${investment.name}`, 'success');
+        }
+      }
+    }
+
+    function viewInvestmentDetails(investmentId) {
+      const investment = investments.find(i => i.id === investmentId);
+      if (!investment) return;
+      
+      const currentItem = investment.type === 'stock' 
+        ? stocks.find(s => s.id === investment.investmentId)
+        : mutualFunds.find(mf => mf.id === investment.investmentId);
+        
+      if (!currentItem) return;
+      
+      const currentValue = investment.quantity * currentItem.price;
+      const investedValue = investment.quantity * investment.avgPrice;
+      const pnl = currentValue - investedValue;
+      const pnlPercent = (pnl / investedValue) * 100;
+      
+      alert(`Investment Details:\n\n` +
+        `Name: ${investment.name}\n` +
+        `Type: ${investment.type === 'stock' ? 'Stock' : 'Mutual Fund'}\n` +
+        `Quantity: ${investment.quantity}\n` +
+        `Average Price: ₹${investment.avgPrice.toFixed(2)}\n` +
+        `Current Price: ₹${currentItem.price.toFixed(2)}\n` +
+        `Invested Amount: ₹${investedValue.toFixed(2)}\n` +
+        `Current Value: ₹${currentValue.toFixed(2)}\n` +
+        `P&L: ₹${pnl.toFixed(2)} (${pnlPercent >= 0 ? '+' : ''}${pnlPercent.toFixed(2)}%)\n` +
+        `Purchased On: ${new Date(investment.date).toLocaleDateString()}`);
+    }
+
+    // Chart functions
+    function updateChartData(investment, timeframe = '1d') {
+      if (!investment) return;
+      
+      const chartTitle = document.getElementById('chartTitle');
+      chartTitle.innerHTML = `<i class="fas fa-chart-line"></i> ${investment.name} Chart`;
+      
+      const ctx = document.getElementById('chartCanvas').getContext('2d');
+      
+      // Destroy previous chart if exists
+      if (chart) {
+        chart.destroy();
+      }
+      
+      const data = investment.historicalData[timeframe];
+      const labels = generateChartLabels(timeframe, data.length);
+      const chartData = data.map(d => d.value);
+      
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Price (₹)',
+            data: chartData,
+            borderColor: '#00e676',
+            backgroundColor: 'rgba(0, 230, 118, 0.1)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false
+            }
+          },
+          scales: {
+            x: {
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              },
+              ticks: {
+                color: '#bdbdbd'
+              }
+            },
+            y: {
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              },
+              ticks: {
+                color: '#bdbdbd',
+                callback: function(value) {
+                  return '₹' + value.toFixed(2);
+                }
+              }
+            }
+          },
+          interaction: {
+            mode: 'nearest',
+            axis: 'x',
+            intersect: false
+          }
+        }
+      });
+    }
+
+    function generateChartLabels(timeframe, count) {
+      const now = new Date();
+      const labels = [];
+      
+      switch(timeframe) {
+        case '1d':
+          // 10-minute intervals for 24 hours
+          for (let i = count - 1; i >= 0; i--) {
+            const date = new Date(now);
+            date.setMinutes(date.getMinutes() - i * 10);
+            labels.push(date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+          }
+          break;
+          
+        case '1w':
+          // Daily for 1 week
+          for (let i = count - 1; i >= 0; i--) {
+            const date = new Date(now);
+            date.setDate(date.getDate() - i);
+            labels.push(date.toLocaleDateString([], { month: 'short', day: 'numeric' }));
+          }
+          break;
+          
+        case '1m':
+          // Daily for 1 month
+          for (let i = count - 1; i >= 0; i--) {
+            const date = new Date(now);
+            date.setDate(date.getDate() - i);
+            labels.push(date.toLocaleDateString([], { month: 'short', day: 'numeric' }));
+          }
+          break;
+          
+        case '3m':
+          // Weekly for 3 months
+          for (let i = count - 1; i >= 0; i--) {
+            const date = new Date(now);
+            date.setDate(date.getDate() - i * 7);
+            labels.push(date.toLocaleDateString([], { month: 'short', day: 'numeric' }));
+          }
+          break;
+          
+        case '1y':
+          // Monthly for 1 year
+          for (let i = count - 1; i >= 0; i--) {
+            const date = new Date(now);
+            date.setMonth(date.getMonth() - i);
+            labels.push(date.toLocaleDateString([], { year: 'numeric', month: 'short' }));
+          }
+          break;
+      }
+      
+      return labels;
+    }
+
+    function updateChartTimeframe() {
+      const timeframe = document.getElementById('timeframeSelect').value;
+      const selectedId = document.getElementById('investmentName').value;
+      
+      if (selectedId) {
+        const type = document.getElementById('investmentType').value;
+        const items = type === 'stock' ? stocks : mutualFunds;
+        const investment = items.find(item => item.id === selectedId);
+        
+        if (investment) {
+          updateChartData(investment, timeframe);
+        }
+      }
+    }
+
+    function toggleFullscreenChart() {
+      const chartContainer = document.querySelector('.investment-chart');
+      if (!document.fullscreenElement) {
+        chartContainer.requestFullscreen().catch(err => {
+          showToast(`Error attempting to enable fullscreen: ${err.message}`, 'error');
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    // Timer functions
+    function startMarketTimer() {
+      localStorage.setItem('marketTimerStart', Date.now());
+      document.getElementById('timer').style.display = 'block';
+      updateMarketTimer();
+      timerInterval = setInterval(updateMarketTimer, 1000);
+    }
+
+    function updateMarketTimer() {
+      const timerStart = parseInt(localStorage.getItem('marketTimerStart'));
+      if (!timerStart) return;
+      
+      const now = Date.now();
+      const elapsed = now - timerStart;
+      const timerDuration = 10 * 60 * 1000; // 10 minutes
+      const remaining = Math.max(0, timerDuration - elapsed);
+      
+      const minutes = Math.floor(remaining / 60000);
+      const seconds = Math.floor((remaining % 60000) / 1000);
+      
+      const timerValue = document.getElementById('timerValue');
+      timerValue.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      
+      // Update timer style based on remaining time
+      const timerElement = document.getElementById('timer');
+      timerElement.className = 'timer';
+      
+      if (remaining < 60000) { // Less than 1 minute
+        timerElement.classList.add('timer-danger');
+      } else if (remaining < 300000) { // Less than 5 minutes
+        timerElement.classList.add('timer-warning');
+      }
+      
+      if (remaining <= 0) {
+        // Trigger market data refresh
+        updateMarketData();
+        
+        // Reset timer
+        localStorage.setItem('marketTimerStart', Date.now());
+      }
+    }
+
+    // Refresh functions
+    function refreshPortfolio() {
+      updatePortfolioSummary();
+      showToast('Portfolio data refreshed', 'success');
+    }
+
+    function refreshMarketData() {
+      updateMarketData();
+      showToast('Market data refreshed', 'success');
+    }
+
+    function refreshInvestments() {
+      updateInvestmentsTable();
+      showToast('Investments data refreshed', 'success');
+    }
+
+    // Utility functions
+    function showToast(message, type = 'info') {
+      const toastContainer = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      
+      let icon;
+      switch(type) {
+        case 'success': icon = 'fa-check-circle'; break;
+        case 'error': icon = 'fa-exclamation-circle'; break;
+        case 'warning': icon = 'fa-exclamation-triangle'; break;
+        default: icon = 'fa-info-circle';
+      }
+      
+      toast.innerHTML = `
+        <i class="fas ${icon} toast-icon"></i>
+        <div class="toast-message">${message}</div>
+        <button class="toast-close" onclick="this.parentElement.remove()">
+          <i class="fas fa-times"></i>
+        </button>
+      `;
+      
+      toastContainer.appendChild(toast);
+      
+      // Show toast
+      setTimeout(() => {
+        toast.classList.add('show');
+      }, 10);
+      
+      // Auto-remove after 5 seconds
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+          toast.remove();
+        }, 300);
+      }, 5000);
+    }
+
+    function generateId() {
+      return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    }
+
+    // Initialize the app when DOM is loaded
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
